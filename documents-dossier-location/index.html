@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>"
+    />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documents dossier location</title>
+    <style>
+      body {
+        padding: 20px 30px;
+      }
+      label {
+        white-space: nowrap !important;
+      }
+    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <h1>Documents à fournir pour la location</h1>
+
+    <div class="mb-4">
+      <label>
+        <input onClick="javascript:fr();" type="radio" name="lang" checked />
+        🇫🇷 Français
+      </label>
+      <label>
+        <input onClick="javascript:en();" type="radio" name="lang" />
+        🇬🇧 English
+      </label>
+    </div>
+
+    <div class="mb-4 fr">
+      Voici la liste des documents attendue dans votre dossier de location.<br />
+      C'est normal si vous n'avez pas tout, mais tout ce que vous pourrez
+      fournir sera forcément un avantage pour votre dossier.
+    </div>
+    <div class="mb-4 en">
+      Here's the list of documents you'll need in your rental file. <br />It's
+      okay if you don't have everything, but anything you can provide is bound
+      to be an advantage for your file.
+    </div>
+
+    <div class="mb-4">
+      <div>
+        <label>
+          <input
+            onClick="javascript:student();"
+            id="student"
+            type="radio"
+            name="status"
+            checked
+          />
+          <span class="fr">👨‍🎓 Etudiant</span>
+          <span class="en">👨‍🎓 Student</span>
+        </label>
+      </div>
+      <div>
+        <label>
+          <input onClick="javascript:apprenti();" type="radio" name="status" />
+          <span class="fr">👷 Apprenti / Stagiaire / Petit boulot</span>
+          <span class="en">👷 Apprentice / Trainee / Small job</span>
+        </label>
+      </div>
+      <div>
+        <label>
+          <input onClick="javascript:employe();" type="radio" name="status" />
+          <span class="fr">💼 Employé</span>
+          <span class="en">💼 Employee</span>
+        </label>
+      </div>
+      <div>
+        <label>
+          <input onClick="javascript:inde();" type="radio" name="status" />
+          <span class="fr">✊ Auto-entrepreneur / Indépendant</span>
+          <span class="en">✊ Self-employed / Independent</span>
+        </label>
+      </div>
+      <div>
+        <label>
+          <input onClick="javascript:chomage();" type="radio" name="status" />
+          <span class="fr">🚶🏻‍♂️ Chômage</span>
+          <span class="en">🚶🏻‍♂️ Unemployment</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="id fr">
+      ➔ Une copie recto/verso de ta carte ID ou passeport (en photo ça suffit)
+    </div>
+    <div class="id en">
+      ➔ A copy of both sides of your ID card or passport (a photo is ok)
+    </div>
+    <div class="quittance fr">
+      ➔ Les quittances de loyer de ton logement précédent <br />(il suffit de
+      demander à ton précédent propriétaire, ou au pire un extrait de compte
+      bancaire avec la trace du paiement)
+    </div>
+    <div class="quittance en">
+      ➔ Rent receipts from your previous accommodation <br />(just ask your
+      previous landlord or at worst a bank statement with a record of the
+      payment).
+    </div>
+    <div class="impots fr">
+      ➔ Ta dernière feuille d'imposition (si tu en as une)
+    </div>
+    <div class="impots en">➔ Your last tax form (if you have one)</div>
+    <div class="titresejour fr">
+      ➔ Ton titre de séjour valide recto/verso (en photo ça suffit)
+    </div>
+    <div class="titresejour en">
+      ➔ Your valid two-sided residence permit (a photo is ok)
+    </div>
+    <div class="salaire fr">➔ 3 derniers bulletins de salaire</div>
+    <div class="salaire en">➔ Last 3 Payslips</div>
+    <div class="contrat fr">➔ Contrat de travail</div>
+    <div class="contrat en">➔ Employment contract</div>
+    <div class="urssaf fr">➔ 2 Dernières déclarations URSSAF</div>
+    <div class="urssaf en">
+      ➔ 2 Latest URSSAF declarations (or any income declaration to tax
+      authorities)
+    </div>
+    <div class="francetravail fr">
+      ➔ Justificatif de revenu de France Travail (ex Pôle Emploi)
+    </div>
+    <div class="francetravail en">
+      ➔ Proof of income from France Travail (ex Pôle Emploi)
+    </div>
+    <div class="scolarite fr">➔ Certificat de scolarité</div>
+    <div class="scolarite en">➔ School certificate</div>
+    <div class="apprentissage fr">
+      ➔ Convention de stage ou contrat d'apprentissage
+    </div>
+    <div class="apprentissage en">➔ Internship or apprenticeship contract</div>
+    <div class="bourse fr">➔ Attestations de bourses</div>
+    <div class="bourse en">➔ Scholarship certificates</div>
+    <div class="garant fr">
+      ➔ Les informations du garant <br />
+      - Une copie de la pièce d'identité du garant<br />
+      - Les coordonnées mail et téléphone du garant <br />
+      - Deux derniers bulletins de salaire et avis d'imposition du garant
+    </div>
+    <div class="garant en">
+      ➔ Guarantor informations<br />
+      - A copy of the guarantor's identity document <br />
+      - The guarantor's e-mail address and telephone number <br />
+      - Two most recent payslips and tax returns from the guarantor
+    </div>
+
+    <script type="text/javascript">
+      let lang = "fr";
+      function $(selector) {
+        return Array.from(document.querySelectorAll(selector));
+      }
+      function toggleDisplay(type) {
+        return (elem) => (elem.style.display = type);
+      }
+      function show() {
+        return toggleDisplay("");
+      }
+      function hide() {
+        return toggleDisplay("none");
+      }
+      function fr() {
+        lang = "fr";
+        $(".fr").map(show());
+        $(".en").map(hide());
+        $(".titresejour").map(hide());
+        student();
+      }
+      function en() {
+        lang = "en";
+        $(".titresejour").map(show());
+        $(".fr").map(hide());
+        $(".en").map(show());
+        student();
+      }
+      function cacherTout() {
+        $(
+          ".salaire,.contrat,.scolarite,.urssaf,.francetravail,.titresejour,.apprentissage,.bourse"
+        ).map(hide());
+      }
+      function student() {
+        cacherTout();
+        $(`.scolarite.${lang}`).map(show());
+        $(`.bourse.${lang}`).map(show());
+        $("#student")[0].click();
+      }
+      function apprenti() {
+        cacherTout();
+        $(`.contrat.${lang}`).map(show());
+        $(`.salaire.${lang}`).map(show());
+        $(`.scolarite.${lang}`).map(show());
+        $(`.bourse.${lang}`).map(show());
+      }
+      function employe() {
+        cacherTout();
+        $(`.salaire.${lang}`).map(show());
+        $(`.contrat.${lang}`).map(show());
+      }
+      function inde() {
+        cacherTout();
+        $(`.urssaf.${lang}`).map(show());
+      }
+      function chomage() {
+        cacherTout();
+        $(`.francetravail.${lang}`).map(show());
+      }
+
+      fr();
+      student();
+    </script>
+  </body>
+</html>
