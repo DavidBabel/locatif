@@ -3,7 +3,6 @@ tocScript.src =
   "https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.27.4/tocbot.min.js";
 document.head.appendChild(tocScript);
 
-// document.addEventListener("DOMContentLoaded", () => {
 let toc = document.createElement("div");
 toc.classList.add("toc");
 document.body.insertBefore(toc, document.body.firstChild);
@@ -11,7 +10,6 @@ document.body.insertBefore(toc, document.body.firstChild);
 Array.from(document.querySelectorAll("h2")).forEach((el) => {
   el.id = el.innerHTML;
 });
-// });
 
 let load = setInterval(() => {
   try {
@@ -21,7 +19,5 @@ let load = setInterval(() => {
       headingSelector: "h2, h3",
     });
     clearInterval(load);
-  } catch (e) {
-    console.log("loading tocbot ...");
-  }
-}, 20);
+  } catch (e) {}
+}, 10);
