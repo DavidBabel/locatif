@@ -46,6 +46,7 @@ body {
 }
 
 /* TOC lib related */
+/* @import url("https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.27.4/tocbot.css"); */
 
 .toc {
   overflow-y: auto;
