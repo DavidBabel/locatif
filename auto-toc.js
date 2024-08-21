@@ -11,10 +11,17 @@ document.addEventListener("DOMContentLoaded", () => {
   Array.from(document.querySelectorAll("h2")).forEach((el) => {
     el.id = el.innerHTML;
   });
-
-  tocbot.init({
-    tocSelector: ".toc",
-    contentSelector: "body",
-    headingSelector: "h2, h3",
-  });
 });
+
+let load = setInterval(() => {
+  try {
+    tocbot.init({
+      tocSelector: ".toc",
+      contentSelector: "body",
+      headingSelector: "h2, h3",
+    });
+    clearInterval(load);
+  } catch (e) {
+    console.log("loading tocbot ...");
+  }
+}, 20);
