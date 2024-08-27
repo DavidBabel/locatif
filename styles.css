@@ -5,6 +5,15 @@ img {
 img.vertical {
   max-width: 50%;
 }
+@media (max-width: 1200px) {
+  img {
+    max-width: 90%;
+  }
+  img.vertical {
+    max-width: 65%;
+  }
+}
+
 body {
   text-align: center;
   padding-bottom: 150px;
