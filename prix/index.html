@@ -23,6 +23,7 @@
               available: false,
               labelFR: "Chambre Ouest côté celier",
               labelEN: "West bedroom, cellar side",
+              img: "./romains/position-celier.jpg",
               size: 9,
               price_history: [
                 {
@@ -36,9 +37,10 @@
               ],
             },
             {
-              available: true,
+              available: false,
               labelFR: "Chambre Est côté cuisine",
               labelEN: "East bedroom, kitchen side",
+              img: "./romains/position-cuisine.jpg",
               size: 9,
               price_history: [
                 {
@@ -52,9 +54,10 @@
               ],
             },
             {
-              available: true,
+              available: false,
               labelFR: "Grande chambre (gauche)",
               labelEN: "Large bedroom (left)",
+              img: "./romains/position-grandeG.jpg",
               size: 11,
               price_history: [
                 {
@@ -68,9 +71,10 @@
               ],
             },
             {
-              available: true,
+              available: false,
               labelFR: "Grande chambre (droite)",
               labelEN: "Large bedroom (right)",
+              img: "./romains/position-grandeD.jpg",
               size: 11,
               price_history: [
                 {
@@ -84,9 +88,10 @@
               ],
             },
             {
-              available: true,
+              available: false,
               labelFR: "Chambre Ouest avec balcon",
               labelEN: "West bedroom with balcony",
+              img: "./romains/position-balcon.jpg",
               size: 9,
               price_history: [
                 {
@@ -142,7 +147,7 @@
               ],
             },
             {
-              available: false,
+              available: true,
               labelFR: "Grande chambre nord",
               labelEN: "Large North bedroom",
               size: 13,
@@ -172,7 +177,7 @@
           ],
         },
       };
-      var flatEnabled = (n, s) => n || s;
+      var flatEnabled = (stack, room) => room.available || stack;
       prix.engel.available = prix.engel.rooms.reduce(flatEnabled, false);
       prix.romains.available = prix.romains.rooms.reduce(flatEnabled, false);
     </script>
@@ -194,12 +199,11 @@
         cursor: pointer;
       }
       li b,
-      li span {
+      ul:not(#flats) li span {
         display: inline-block;
         text-align: right;
         width: 85px;
         padding-right: 15px;
-
         font-size: 110%;
       }
       li u {
@@ -207,11 +211,34 @@
         width: 170px;
         text-decoration: none;
       }
+
+      h3 {
+        white-space: nowrap;
+      }
       .disabled {
         color: grey;
       }
+      #flats li,
       #rooms li {
         list-style-type: none;
+      }
+      #room-image {
+        max-height: 360px;
+      }
+      #rooms {
+        min-height: 154px;
+      }
+      @media (max-width: 576px) {
+        li i {
+          display: none;
+        }
+        #rooms {
+          min-height: 0;
+        }
+      }
+      .container {
+        margin-left: 0 !important;
+        padding-left: 0 !important;
       }
     </style>
     <link
@@ -249,26 +276,49 @@
       >
     </p>
 
-    <h3 class="fr">🏠 Appartement</h3>
-    <h3 class="en">🏠 Flat</h3>
-    <div class="mb-4">
-      <label id="engel-available">
-        <span id="engel-available-icon"></span>&nbsp;
-        <input onClick="javascript:engel();" type="radio" name="flat" checked />
-        💎 Engelbreit
-      </label>
-      <label id="romains-available">
-        <span id="romains-available-icon"></span>&nbsp;
-        <input onClick="javascript:romains();" type="radio" name="flat" />
-        ✨ Romains
-      </label>
-    </div>
-    <h3 class="fr">🛏️ Chambre</h3>
-    <h3 class="en">🛏️ Room</h3>
-    <div class="mb-4">
-      <p class="fr">Choisissez une chambre:</p>
-      <p class="en">Please pick one</p>
-      <ul id="rooms"></ul>
+    <div class="container">
+      <div class="row">
+        <div class="col-4 col-md-6">
+          <h3 class="fr">🏠 Appartement</h3>
+          <h3 class="en">🏠 Flat</h3>
+          <ul id="flats">
+            <li>
+              <label id="engel-available">
+                <span id="engel-available-icon"></span>&nbsp;
+                <input
+                  onClick="javascript:engel();"
+                  type="radio"
+                  name="flat"
+                  checked
+                />
+                💎 Engelbreit
+              </label>
+            </li>
+            <li>
+              <label id="romains-available">
+                <span id="romains-available-icon"></span>&nbsp;
+                <input
+                  onClick="javascript:romains();"
+                  type="radio"
+                  name="flat"
+                />
+                ✨ Romains
+              </label>
+            </li>
+          </ul>
+
+          <h3 class="fr">🛏️ Chambre</h3>
+          <h3 class="en">🛏️ Room</h3>
+          <div class="mb-4">
+            <p class="fr">Choisissez une chambre:</p>
+            <p class="en">Please pick one</p>
+            <ul id="rooms"></ul>
+          </div>
+        </div>
+        <div class="col-4 d-none d-md-block">
+          <img id="room-image" src="" alt="" />
+        </div>
+      </div>
     </div>
 
     <h3 class="fr">💰 Prix</h3>
@@ -342,11 +392,15 @@
       function $(selector) {
         return Array.from(document.querySelectorAll(selector));
       }
+      function FRDate(chaineDate) {
+        var parties = chaineDate.split("/");
+        return new Date(parties[2], parties[1] - 1, parties[0]);
+      }
       function lastPrice(prices) {
         var lastDate = "01/01/1970";
         var currentPrice = 0;
         prices.forEach(({ date, price }) => {
-          if (new Date(date) > new Date(lastDate)) {
+          if (FRDate(date) > FRDate(lastDate)) {
             lastDate = date;
             currentPrice = price;
           }
@@ -386,6 +440,10 @@
         currentLanguage == "fr" ? fr() : en();
       }
       var currentFlat = "engel";
+      if (!prix.engel.available && prix.romains.available) {
+        currentFlat = "romains";
+        $("#romains-available input")[0].click();
+      }
       function engel() {
         currentFlat = "engel";
         loadRooms();
@@ -395,41 +453,39 @@
         loadRooms();
       }
 
-      function room(id) {}
-
       function loadRooms() {
         var html = "";
         // console.log(prix[currentFlat]);
-        var firstRoomAvailableIndex = 0;
+        var IDalreadySelected = -1;
 
         prix[currentFlat].rooms?.forEach(
           ({ available, labelFR, labelEN, size, price_history }, index) => {
-            if (!available) {
-              firstRoomAvailableIndex++;
+            if (available && IDalreadySelected < 0) {
+              IDalreadySelected = index;
             }
-            var checked = index === 0 ? "checked" : "";
+            var checked = IDalreadySelected == index ? "checked" : "";
             var availableIcon = available ? "✅" : "❌";
             var disabled = available ? "" : `disabled="disabled"`;
             html += `
               <li>
-              <label>
-                <input onClick="javascript:room(${index});" type="radio" name="room" ${checked} ${disabled}/>
-                ${availableIcon} <font class="fr">${labelFR}</font> <font class="en">${labelEN}</font> - ${size}m²
-              </label>
+                <label>
+                  <input onClick="javascript:room(${index});" type="radio" name="room" ${checked} ${disabled}/>
+                  ${availableIcon} <font class="fr">${labelFR}</font> <font class="en">${labelEN}</font> - ${size}m²
+                </label>
               </li>
               `;
           }
         );
 
         $("#rooms").set(html);
-        room(firstRoomAvailableIndex);
+        room(IDalreadySelected);
         setLangage();
       }
 
       function room(index) {
         var flat = prix[currentFlat];
         var { caution, charges } = flat;
-        var { labelFR, labelEN, size, price_history } = flat.rooms[index];
+        var { labelFR, labelEN, size, price_history, img } = flat.rooms[index];
 
         var totalPrice =
           lastPrice(price_history) + lastPrice(charges) + prix.insurance;
@@ -440,13 +496,15 @@
         $(".charges").setE(charges);
         $(".caution").setE(caution);
         $(".total").set(totalPrice + " €");
+
+        $("#room-image")[0].src = img || "";
       }
 
       $(".insurance").set("~ " + prix.insurance + " €");
       $("#engel-available-icon").set(prix.engel.available ? "✅" : "❌");
       $("#romains-available-icon").set(prix.romains.available ? "✅" : "❌");
-      $("#engel-available").disabled = prix.engel.available;
-      $("#romains-available").disabled = prix.romains.available;
+      $("#engel-available input")[0].disabled = !prix.engel.available;
+      $("#romains-available input")[0].disabled = !prix.romains.available;
       setLangage();
       loadRooms();
     </script>
