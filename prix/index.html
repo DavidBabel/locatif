@@ -2,6 +2,22 @@
 <html lang="en">
   <head>
     <script>
+      var available = {
+        romains: {
+          celier: false,
+          cuisine: false,
+          grandeD: false,
+          grandeG: false,
+          balcon: false,
+        },
+        engel: {
+          salon: false,
+          sud: false,
+          nord: false,
+          ouest: false,
+        },
+      };
+
       var prix = {
         insurance: 9,
         romains: {
@@ -20,7 +36,7 @@
           ],
           rooms: [
             {
-              available: false,
+              available: available.romains.celier,
               labelFR: "Chambre Ouest côté celier",
               labelEN: "West bedroom, cellar side",
               img: "./romains/position-celier.jpg",
@@ -37,7 +53,7 @@
               ],
             },
             {
-              available: false,
+              available: available.romains.cuisine,
               labelFR: "Chambre Est côté cuisine",
               labelEN: "East bedroom, kitchen side",
               img: "./romains/position-cuisine.jpg",
@@ -54,7 +70,7 @@
               ],
             },
             {
-              available: false,
+              available: available.romains.grandeG,
               labelFR: "Grande chambre (gauche)",
               labelEN: "Large bedroom (left)",
               img: "./romains/position-grandeG.jpg",
@@ -71,7 +87,7 @@
               ],
             },
             {
-              available: false,
+              available: available.romains.grandeD,
               labelFR: "Grande chambre (droite)",
               labelEN: "Large bedroom (right)",
               img: "./romains/position-grandeD.jpg",
@@ -88,7 +104,7 @@
               ],
             },
             {
-              available: false,
+              available: available.romains.balcon,
               labelFR: "Chambre Ouest avec balcon",
               labelEN: "West bedroom with balcony",
               img: "./romains/position-balcon.jpg",
@@ -123,7 +139,7 @@
           ],
           rooms: [
             {
-              available: false,
+              available: available.engel.salon,
               labelFR: "Chambre sud salon",
               labelEN: "South bedroom",
               size: 10,
@@ -135,7 +151,7 @@
               ],
             },
             {
-              available: false,
+              available: available.engel.ouest,
               labelFR: "Chambre Ouest",
               labelEN: "West bedroom",
               size: 11,
@@ -147,7 +163,7 @@
               ],
             },
             {
-              available: true,
+              available: available.engel.nord,
               labelFR: "Grande chambre nord",
               labelEN: "Large North bedroom",
               size: 13,
@@ -163,7 +179,7 @@
               ],
             },
             {
-              available: false,
+              available: available.engel.sud,
               labelFR: "Grande chambre sud",
               labelEN: "Large south bedroom",
               size: 15,
@@ -192,6 +208,7 @@
     <style>
       body {
         padding: 20px 30px;
+        user-select: none;
       }
       label {
         white-space: nowrap !important;
@@ -211,8 +228,26 @@
         width: 170px;
         text-decoration: none;
       }
-
+      li.apl-checkbox {
+        list-style-type: none;
+        margin-left: -18px;
+      }
+      li.apl-checkbox input {
+        margin-right: 2px;
+      }
+      li.apl-checkbox b {
+        margin-left: 18px;
+      }
+      li.plus {
+        list-style-type: "+ ";
+        margin-left: -2px;
+        margin-right: 2px;
+        color: darkgrey;
+      }
       h3 {
+        white-space: nowrap;
+      }
+      .nowrap {
         white-space: nowrap;
       }
       .disabled {
@@ -227,6 +262,15 @@
       }
       #rooms {
         min-height: 154px;
+      }
+      li i {
+        color: #a6a6a6;
+      }
+      @media (max-width: 800px) {
+        li i {
+          display: block;
+          padding-right: 30px;
+        }
       }
       @media (max-width: 576px) {
         li i {
@@ -310,8 +354,8 @@
           <h3 class="fr">🛏️ Chambre</h3>
           <h3 class="en">🛏️ Room</h3>
           <div class="mb-4">
-            <p class="fr">Choisissez une chambre:</p>
-            <p class="en">Please pick one</p>
+            <p class="fr nowrap">Choisissez une chambre:</p>
+            <p class="en nowrap">Please pick one</p>
             <ul id="rooms"></ul>
           </div>
         </div>
@@ -327,16 +371,30 @@
     <div class="mb-4 room">
       <h6 class="fr roomFR"></h6>
       <h6 class="en roomEN"></h6>
-      <b class="fr">Par mois:</b>
-      <b class="en">Per month:</b>
+      <b class="fr">📆 Par mois:</b>
+      <b class="en">📆 Per month:</b>
       <ul>
         <li class="fr">
-          <u>Loyer :</u> <b class="loyer">0€</b>
+          <u>Loyer:</u> <b class="loyer">0€</b>
           <i></i>
         </li>
         <li class="en">
           <u>Rent:</u> <b class="loyer">0€</b>
           <i></i>
+        </li>
+        <li class="apl-checkbox">
+          <u>
+            <input
+              type="checkbox"
+              id="apl-checkbox"
+              onClick="javascript:room()"
+            />
+            <label class="fr" for="apl-checkbox">Éligible APL ?</label>
+            <label class="en" for="apl-checkbox">Eligible for APL ?</label>
+          </u>
+          <b class="apl">0€</b>
+          <i class="fr"> aide au logement de la CAF</i>
+          <i class="en"> CAF housing benefit</i>
         </li>
         <li class="fr">
           <u>Charges:</u> <b class="charges">0€</b>
@@ -349,33 +407,32 @@
           <u>Charges:</u> <b class="charges">0€</b>
           <i>
             includes 💧 water, ♨️ hot water, 🌡️ heating, 💡 electricity and 🌐
-            fiber internet.</i
-          >
+            fiber internet.
+          </i>
         </li>
         <li>
           <u>Total:</u> <span class="total">0€</span>
           <i></i>
         </li>
-        <li class="fr">
+        <li class="fr plus">
           <u>Assurance habitation:</u> <span class="insurance">0€</span>
           <i>obligatoire pour toute location en 🇫🇷 France </i>
         </li>
-        <li class="en">
+        <li class="en plus">
           <u>Home Insurance:</u> <span class="insurance">0€</span>
           <i> mandatory for any rental in 🇫🇷 France</i>
         </li>
       </ul>
-      <b class="fr">Une fois:</b>
-      <b class="en">One time:</b>
-
+      <b class="fr">☝️ Une fois / rendu au départ:</b>
+      <b class="en">☝️ One time / sent back on departure:</b>
       <ul>
         <li class="fr">
           <u>Caution:</u> <span class="caution">0€</span>
-          <i>payé une fois, rendu au départ </i>
+          <i>à l'entrée, peut être échelonné</i>
         </li>
         <li class="en">
           <u>Deposit:</u> <span class="caution">0€</span>
-          <i> paid once, get back on departure</i>
+          <i>at the entrance, can be staggered</i>
         </li>
         <li class="fr">
           <u><s>Frais d'agence:</s></u> <span>0 €</span>
@@ -390,11 +447,23 @@
 
     <script type="text/javascript">
       function $(selector) {
-        return Array.from(document.querySelectorAll(selector));
+        var result = Array.from(document.querySelectorAll(selector));
+        return result.length === 1 ? result[0] : result;
       }
+
+      var admin = false;
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "p") {
+          admin = !admin;
+          $("#engel-available input").disabled = !admin;
+          $("#romains-available input").disabled = !admin;
+          loadRooms();
+        }
+      });
+
       function FRDate(chaineDate) {
-        var parties = chaineDate.split("/");
-        return new Date(parties[2], parties[1] - 1, parties[0]);
+        var [day, month, year] = chaineDate.split("/");
+        return new Date(year, month - 1, day);
       }
       function lastPrice(prices) {
         var lastDate = "01/01/1970";
@@ -435,14 +504,13 @@
         $(".en").map(show());
         currentLanguage = "en";
       }
-
       function setLangage() {
         currentLanguage == "fr" ? fr() : en();
       }
       var currentFlat = "engel";
       if (!prix.engel.available && prix.romains.available) {
         currentFlat = "romains";
-        $("#romains-available input")[0].click();
+        $("#romains-available input").click();
       }
       function engel() {
         currentFlat = "engel";
@@ -455,7 +523,6 @@
 
       function loadRooms() {
         var html = "";
-        // console.log(prix[currentFlat]);
         var IDalreadySelected = -1;
 
         prix[currentFlat].rooms?.forEach(
@@ -465,46 +532,54 @@
             }
             var checked = IDalreadySelected == index ? "checked" : "";
             var availableIcon = available ? "✅" : "❌";
-            var disabled = available ? "" : `disabled="disabled"`;
+            var disabled = admin || available ? "" : `disabled="disabled"`;
             html += `
               <li>
                 <label>
+                  ${availableIcon}&nbsp;
                   <input onClick="javascript:room(${index});" type="radio" name="room" ${checked} ${disabled}/>
-                  ${availableIcon} <font class="fr">${labelFR}</font> <font class="en">${labelEN}</font> - ${size}m²
+                  <font class="fr">${labelFR}</font> <font class="en">${labelEN}</font> - ${size}m²
                 </label>
               </li>
               `;
           }
         );
+        if (IDalreadySelected === -1) {
+          IDalreadySelected = 0;
+        }
 
         $("#rooms").set(html);
         room(IDalreadySelected);
         setLangage();
       }
 
-      function room(index) {
+      var lastRoomIndex = -1;
+      function room(index = lastRoomIndex) {
+        lastRoomIndex = index;
         var flat = prix[currentFlat];
         var { caution, charges } = flat;
         var { labelFR, labelEN, size, price_history, img } = flat.rooms[index];
 
+        var hasAPL = $("#apl-checkbox").checked;
         var totalPrice =
-          lastPrice(price_history) + lastPrice(charges) + prix.insurance;
+          lastPrice(price_history) + lastPrice(charges) - (hasAPL ? 100 : 0);
 
         $(".roomFR").set(labelFR);
         $(".roomEN").set(labelEN);
         $(".loyer").setE(price_history);
+        $(".apl").set(hasAPL ? "-100 €" : "0 €");
         $(".charges").setE(charges);
         $(".caution").setE(caution);
         $(".total").set(totalPrice + " €");
 
-        $("#room-image")[0].src = img || "";
+        $("#room-image").src = img || "";
       }
 
-      $(".insurance").set("~ " + prix.insurance + " €");
+      $(".insurance").set("≈ " + prix.insurance + " €");
       $("#engel-available-icon").set(prix.engel.available ? "✅" : "❌");
       $("#romains-available-icon").set(prix.romains.available ? "✅" : "❌");
-      $("#engel-available input")[0].disabled = !prix.engel.available;
-      $("#romains-available input")[0].disabled = !prix.romains.available;
+      $("#engel-available input").disabled = !prix.engel.available;
+      $("#romains-available input").disabled = !prix.romains.available;
       setLangage();
       loadRooms();
     </script>
