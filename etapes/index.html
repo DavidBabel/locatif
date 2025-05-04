@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>"
+    />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Etapes de la location d'une chambre</title>
+    <style>
+      body {
+        padding: 20px 30px;
+      }
+      label {
+        white-space: nowrap !important;
+        cursor: pointer;
+      }
+      img {
+        margin-top: -3px;
+      }
+    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <h1 class="fr">Etapes d'une location de chambre</h1>
+    <h1 class="en">Steps for renting a room</h1>
+
+    <div class="mb-4">
+      <label>
+        <input onClick="javascript:fr();" type="radio" name="lang" checked />
+        <img
+          src="https://flagcdn.com/w40/fr.png"
+          alt="FR"
+          width="18"
+          height="12"
+        />
+        Français
+      </label>
+      <label>
+        <input onClick="javascript:en();" type="radio" name="lang" />
+        <img
+          src="https://flagcdn.com/w40/gb.png"
+          alt="EN"
+          width="18"
+          height="12"
+        />
+        English
+      </label>
+    </div>
+
+    <div class="mb-4 fr">
+      Voici la liste des étapes traditionnelles pour louer une chambre en
+      France.
+    </div>
+    <div class="mb-4 en">
+      Here is the list of traditional steps to rent a room in France.
+    </div>
+
+    <div class="form fr">
+      ➔ Formulaire pour découvrir l'appartement et postuler
+    </div>
+    <div class="form en">➔ Form to discover the apartment and apply</div>
+
+    <div class="contact fr">➔ Prise de contact pour programmer une visite</div>
+    <div class="contact en">➔ Contact to schedule a visit</div>
+
+    <div class="visit fr">➔ Visite de l'appartement, choix de la chambre</div>
+    <div class="visit en">➔ Apartment visit, choice of room</div>
+
+    <div class="reflexion fr">
+      ➔ Délai de réflexion de quelques jours maximum
+    </div>
+    <div class="reflexion en">➔ Reflection period of up to a few days</div>
+
+    <div class="debutLocation fr">
+      ➔ Choix d'une chambre et d'une date de début de location
+    </div>
+    <div class="debutLocation en">
+      ➔ Choice of a room and a rental start date
+    </div>
+
+    <div class="bail fr">➔ Signature du bail et de la caution solidaire</div>
+    <div class="bail en">➔ Signing of the lease and the joint guarantee</div>
+
+    <div class="assurance fr">
+      ➔ Fournir un justificatif d'assurance habitation
+    </div>
+    <div class="assurance en">➔ Provide proof of home insurance</div>
+
+    <div class="loyer fr">➔ Versement du premier loyer et des charges</div>
+    <div class="loyer en">➔ Payment of the first rent and charges</div>
+
+    <div class="caution fr">
+      ➔ Versement du dépôt de garantie (appelé parfois "caution").
+      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i
+        ><b>Note :</b> il peut être versé en plusieurs fois</i
+      >
+    </div>
+    <div class="caution en">
+      ➔ Payment of the security deposit (sometimes called "caution").
+      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i
+        ><b>Note:</b> it can be paid in several installments</i
+      >
+    </div>
+
+    <div class="etatDesLieux fr">➔ État des lieux d'entrée</div>
+    <div class="etatDesLieux en">➔ Move-in inventory check</div>
+
+    <div class="cles fr">➔ Remise des clés</div>
+    <div class="cles en">➔ Key handover</div>
+
+    <script type="text/javascript">
+      let lang = "fr";
+      function $(selector) {
+        return Array.from(document.querySelectorAll(selector));
+      }
+      function toggleDisplay(type) {
+        return (elem) => (elem.style.display = type);
+      }
+      function show() {
+        return toggleDisplay("");
+      }
+      function hide() {
+        return toggleDisplay("none");
+      }
+      function fr() {
+        lang = "fr";
+        $(".fr").map(show());
+        $(".en").map(hide());
+      }
+      function en() {
+        lang = "en";
+        $(".fr").map(hide());
+        $(".en").map(show());
+      }
+
+      fr();
+    </script>
+  </body>
+</html>
