@@ -163,7 +163,10 @@
       }
 
       function updateResult() {
-        const [prefix, emojiEtat] = etat.value.split("");
+        let [prefix, emojiEtat] = etat.value.split("");
+        if (emojiEtat == "➡") {
+          emojiEtat = "➡️";
+        }
         const appart =
           appartement.value === "Romains" ? "[Romains]" : "[Engel]";
         const laDate = date.value.trim();
