@@ -1,238 +1,235 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>"
-    />
-    <title>Générateur de titres - État des lieux / inventaires</title>
 
-    <script>
-      const locatairesParAppartement = {
-        Romains: [
-          "Joana Ponsenard",
-          "Inga Kurtanidze",
-          "Charlotte Maingreaud",
-          "Maëlys Laugier",
-          "Marie PRÉVOT",
-          "Maxime Scaduto",
-          "Salome Abramishvili",
-        ],
-        Engel: [
-          "Xavier Roulot",
-          "Natalia Dzioba",
-          "Martin Faure",
-          "Laurène Fouquet",
-        ],
-      };
-    </script>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>" />
+  <title>Générateur de titres - État des lieux / inventaires</title>
 
-    <style>
-      body {
-        font-family: sans-serif;
-        padding: 2em;
-        max-width: 500px;
-        margin: auto;
-      }
-      label {
-        display: block;
-        margin-top: 1em;
-      }
-      select,
-      input[type="text"] {
-        width: 100%;
-        padding: 0.5em;
-      }
-      button {
-        margin-top: 1em;
-      }
-      #result {
-        margin-top: 1em;
-        width: 100%;
-        padding: 0.5em;
-        font-weight: bold;
-      }
-      #copied-message {
-        margin-top: 0.5em;
-        color: green;
-        display: none;
-        font-size: 0.9em;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Générateur de titres - État des lieux / inventaires</h1>
+  <script>
+    const locatairesParAppartement = {
+      Romains: [
+        "Joana Ponsenard",
+        "Inga Kurtanidze",
+        "Charlotte Maingreaud",
+        "Maëlys Laugier",
+        "Marie Prévot",
+        "Maxime Scaduto",
+        "Salome Abramishvili",
+      ],
+      Engel: [
+        "Xavier Roulot",
+        "Natalia Dzioba",
+        "Martin Faure",
+        // "Laurène Fouquet",
+        "Leya Cellier",
+      ],
+    };
+  </script>
 
-    <label
-      >Type :
-      <select id="etat">
-        <option value="E➡️">➡️ État des lieux d'entrée</option>
-        <option value="E❌">❌ État des lieux de sortie</option>
-        <option value="I➡️">➡️ Inventaire d'entrée</option>
-        <option value="I❌">❌ Inventaire de sortie</option>
-      </select>
-    </label>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      max-width: 500px;
+      margin: auto;
+    }
 
-    <label
-      >Appartement :
-      <select id="appartement">
-        <option value="Romains">✨ Romains</option>
-        <option value="Engel">💎 Engelbreit</option>
-      </select>
-    </label>
+    label {
+      display: block;
+      margin-top: 1em;
+    }
 
-    <label
-      >Date (MM/AA) :
-      <input type="text" id="date" placeholder="MM/AA" />
-    </label>
+    select,
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5em;
+    }
 
-    <label
-      >Locataire :
-      <select id="locataire-select">
-        <option value="">-- Choisir --</option>
-      </select>
-      <input
-        type="text"
-        id="locataire"
-        placeholder="Ou entrez un nouveau locataire"
-      />
-    </label>
+    button {
+      margin-top: 1em;
+    }
 
-    <label
-      >Chambre :
-      <select id="chambre"></select>
-    </label>
+    #result {
+      margin-top: 1em;
+      width: 100%;
+      padding: 0.5em;
+      font-weight: bold;
+    }
 
-    <label
-      >Résultat :
-      <input type="text" id="result" readonly />
-    </label>
+    #copied-message {
+      margin-top: 0.5em;
+      color: green;
+      display: none;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
 
-    <button onclick="copier()">📋 Copier</button>
-    <div id="copied-message">Copié ✅</div>
+<body>
+  <h1>Générateur de titres - État des lieux / inventaires</h1>
 
-    <script>
-      const chambreRomains = [
-        { label: "⚡ Chambre Cuisine", value: "Chambre Cuisine" },
-        { label: "⚡ Chambre Gauche", value: "Chambre Gauche" },
-        { label: "⚡ Chambre Cellier", value: "Chambre Cellier" },
-        { label: "⚡ Chambre Balcon", value: "Chambre Balcon" },
-        { label: "⚡ Chambre Droite", value: "Chambre Droite" },
-        { label: "❇️ Communs", value: "Communs" },
-      ];
+  <label>Type :
+    <select id="etat">
+      <option value="E➡️">➡️ État des lieux d'entrée</option>
+      <option value="E❌">❌ État des lieux de sortie</option>
+      <option value="I➡️">➡️ Inventaire d'entrée</option>
+      <option value="I❌">❌ Inventaire de sortie</option>
+    </select>
+  </label>
 
-      const chambreEngel = [
-        { label: "⚡ Chambre Salon", value: "Chambre Salon" },
-        { label: "⚡ Grande Chambre Sud", value: "Grande Chambre Sud" },
-        { label: "⚡ Chambre Ouest", value: "Chambre Ouest" },
-        { label: "⚡ Chambre Nord", value: "Chambre Nord" },
-        { label: "❇️ Communs", value: "Communs" },
-      ];
+  <label>Appartement :
+    <select id="appartement">
+      <option value="Romains">✨ Romains</option>
+      <option value="Engel">💎 Engelbreit</option>
+    </select>
+  </label>
 
-      const etat = document.getElementById("etat");
-      const appartement = document.getElementById("appartement");
-      const date = document.getElementById("date");
-      const locataireSelect = document.getElementById("locataire-select");
-      const locataireInput = document.getElementById("locataire");
-      const chambre = document.getElementById("chambre");
-      const result = document.getElementById("result");
-      const copiedMessage = document.getElementById("copied-message");
+  <label>Date (MM/AA) :
+    <input type="text" id="date" placeholder="MM/AA" />
+  </label>
 
-      function updateChambres() {
-        chambre.innerHTML = "";
-        const liste =
-          appartement.value === "Romains" ? chambreRomains : chambreEngel;
-        liste.forEach((c) => {
-          const option = document.createElement("option");
-          option.value = c.value;
-          option.textContent = c.label;
-          chambre.appendChild(option);
-        });
-      }
+  <label>Locataire :
+    <select id="locataire-select">
+      <option value="">-- Choisir --</option>
+    </select>
+    <input type="text" id="locataire" placeholder="Ou entrez un nouveau locataire" />
+  </label>
 
-      function updateLocataires() {
-        locataireSelect.innerHTML = '<option value="">-- Choisir --</option>';
-        const liste = locatairesParAppartement[appartement.value] || [];
-        liste.forEach((nom) => {
-          const option = document.createElement("option");
-          option.value = nom;
-          option.textContent = nom;
-          locataireSelect.appendChild(option);
-        });
-      }
+  <label>Chambre :
+    <select id="chambre"></select>
+  </label>
 
-      function updateResult() {
-        let [prefix, emojiEtat] = etat.value.split("");
-        if (emojiEtat == "➡") {
-          emojiEtat = "➡️";
-        }
-        const appart =
-          appartement.value === "Romains" ? "[Romains]" : "[Engel]";
-        const laDate = date.value.trim();
-        const locataire = locataireInput.value.trim();
-        const chambreChoisie = chambre.value;
+  <label>Résultat :
+    <input type="text" id="result" readonly />
+  </label>
 
-        // Enregistrer le dernier locataire
-        document.cookie = `dernierLocataire=${encodeURIComponent(
-          locataire
-        )}; max-age=31536000; path=/`;
+  <button onclick="copier()">📋 Copier</button>
+  <div id="copied-message">Copié ✅</div>
 
-        const suffixe =
-          chambreChoisie === "Communs" ? "❇️ Communs" : `⚡ ${chambreChoisie}`;
+  <script>
+    const chambreRomains = [
+      { label: "⚡ Chambre Cuisine", value: "Chambre Cuisine" },
+      { label: "⚡ Chambre Gauche", value: "Chambre Gauche" },
+      { label: "⚡ Chambre Cellier", value: "Chambre Cellier" },
+      { label: "⚡ Chambre Balcon", value: "Chambre Balcon" },
+      { label: "⚡ Chambre Droite", value: "Chambre Droite" },
+      { label: "❇️ Communs", value: "Communs" },
+    ];
 
-        const suffixType = prefix === "E" ? "(edl)" : "(inv)";
-        result.value = `${emojiEtat} ${appart} ${laDate} ${locataire} ${suffixe} ${suffixType}`;
-      }
+    const chambreEngel = [
+      { label: "⚡ Chambre Salon", value: "Chambre Salon" },
+      { label: "⚡ Grande Chambre Sud", value: "Grande Chambre Sud" },
+      { label: "⚡ Chambre Ouest", value: "Chambre Ouest" },
+      { label: "⚡ Chambre Nord", value: "Chambre Nord" },
+      { label: "❇️ Communs", value: "Communs" },
+    ];
 
-      function copier() {
-        navigator.clipboard.writeText(result.value).then(() => {
-          copiedMessage.style.display = "block";
-          setTimeout(() => {
-            copiedMessage.style.display = "none";
-          }, 2000);
-        });
-      }
+    const etat = document.getElementById("etat");
+    const appartement = document.getElementById("appartement");
+    const date = document.getElementById("date");
+    const locataireSelect = document.getElementById("locataire-select");
+    const locataireInput = document.getElementById("locataire");
+    const chambre = document.getElementById("chambre");
+    const result = document.getElementById("result");
+    const copiedMessage = document.getElementById("copied-message");
 
-      result.addEventListener("click", function () {
-        this.select();
+    function updateChambres() {
+      chambre.innerHTML = "";
+      const liste =
+        appartement.value === "Romains" ? chambreRomains : chambreEngel;
+      liste.forEach((c) => {
+        const option = document.createElement("option");
+        option.value = c.value;
+        option.textContent = c.label;
+        chambre.appendChild(option);
       });
+    }
 
-      locataireSelect.addEventListener("change", () => {
-        locataireInput.value = locataireSelect.value;
-        updateResult();
+    function updateLocataires() {
+      locataireSelect.innerHTML = '<option value="">-- Choisir --</option>';
+      const liste = locatairesParAppartement[appartement.value] || [];
+      liste.forEach((nom) => {
+        const option = document.createElement("option");
+        option.value = nom;
+        option.textContent = nom;
+        locataireSelect.appendChild(option);
       });
+    }
 
-      [etat, appartement, date, locataireInput, chambre].forEach((el) => {
-        el.addEventListener("change", updateResult);
-        el.addEventListener("input", updateResult);
+    function updateResult() {
+      let [prefix, emojiEtat] = etat.value.split("");
+      if (emojiEtat == "➡") {
+        emojiEtat = "➡️";
+      }
+      const appart =
+        appartement.value === "Romains" ? "[Romains]" : "[Engel]";
+      const laDate = date.value.trim();
+      const locataire = locataireInput.value.trim();
+      const chambreChoisie = chambre.value;
+
+      // Enregistrer le dernier locataire
+      document.cookie = `dernierLocataire=${encodeURIComponent(
+        locataire
+      )}; max-age=31536000; path=/`;
+
+      const suffixe =
+        chambreChoisie === "Communs" ? "❇️ Communs" : `⚡ ${chambreChoisie}`;
+
+      const suffixType = prefix === "E" ? "(edl)" : "(inv)";
+      result.value = `${emojiEtat} ${appart} ${laDate} ${locataire} ${suffixe} ${suffixType}`;
+    }
+
+    function copier() {
+      navigator.clipboard.writeText(result.value).then(() => {
+        copiedMessage.style.display = "block";
+        setTimeout(() => {
+          copiedMessage.style.display = "none";
+        }, 2000);
       });
+    }
 
-      appartement.addEventListener("change", () => {
-        updateLocataires();
-        updateChambres();
-        updateResult();
-      });
+    result.addEventListener("click", function () {
+      this.select();
+    });
 
-      // Initialisation
-      (function () {
-        const now = new Date();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const year = String(now.getFullYear()).slice(-2);
-        date.value = `${month}/${year}`;
+    locataireSelect.addEventListener("change", () => {
+      locataireInput.value = locataireSelect.value;
+      updateResult();
+    });
 
-        // Charger le dernier locataire
-        const cookies = document.cookie.split(";").map((c) => c.trim());
-        const cookie = cookies.find((c) => c.startsWith("dernierLocataire="));
-        if (cookie) {
-          const nom = decodeURIComponent(cookie.split("=")[1]);
-          locataireInput.value = nom;
-        }
+    [etat, appartement, date, locataireInput, chambre].forEach((el) => {
+      el.addEventListener("change", updateResult);
+      el.addEventListener("input", updateResult);
+    });
 
-        updateLocataires();
-        updateChambres();
-        updateResult();
-      })();
-    </script>
-  </body>
+    appartement.addEventListener("change", () => {
+      updateLocataires();
+      updateChambres();
+      updateResult();
+    });
+
+    // Initialisation
+    (function () {
+      const now = new Date();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const year = String(now.getFullYear()).slice(-2);
+      date.value = `${month}/${year}`;
+
+      // Charger le dernier locataire
+      const cookies = document.cookie.split(";").map((c) => c.trim());
+      const cookie = cookies.find((c) => c.startsWith("dernierLocataire="));
+      if (cookie) {
+        const nom = decodeURIComponent(cookie.split("=")[1]);
+        locataireInput.value = nom;
+      }
+
+      updateLocataires();
+      updateChambres();
+      updateResult();
+    })();
+  </script>
+</body>
+
 </html>
