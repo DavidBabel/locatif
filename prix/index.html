@@ -22,7 +22,7 @@
     var prix = {
       insurance: 9,
       romains: {
-        available: true, // computed
+        available: true,
         charges: [
           {
             date: "09/2024",
@@ -55,7 +55,6 @@
                 price: 355,
               },
               {
-                future: true,
                 date: "08/2025",
                 price: 361,
               },
@@ -75,7 +74,6 @@
                 price: 349,
               },
               {
-                future: true,
                 date: "02/2025",
                 price: 362,
               },
@@ -100,7 +98,6 @@
                 price: 370,
               },
               {
-                future: true,
                 date: "08/2025",
                 price: 375,
               },
@@ -120,7 +117,6 @@
                 price: 365,
               },
               {
-                future: true,
                 date: "06/2025",
                 price: 376,
               },
@@ -140,7 +136,6 @@
                 price: 360,
               },
               {
-                future: true,
                 date: "06/2025",
                 price: 378,
               },
@@ -148,9 +143,8 @@
           },
         ],
       },
-
       engel: {
-        available: true, // computed
+        available: true,
         charges: [
           {
             date: "04/2023",
@@ -177,12 +171,11 @@
                 price: 398,
               },
               {
-                nome: "Laurene Fouquet",
-                date: "04/2023",
+                nom: "Laurene Fouquet",
+                date: "04/2024",
                 price: 398,
               },
               {
-                future: true,
                 date: "04/2025",
                 price: 410,
               },
@@ -201,7 +194,6 @@
                 price: 410,
               },
               {
-                future: true,
                 date: "04/2025",
                 price: 415,
               },
@@ -225,7 +217,6 @@
                 price: 426,
               },
               {
-                future: true,
                 date: "04/2025",
                 price: 430,
               },
@@ -253,6 +244,7 @@
         ],
       },
     };
+
     var flatEnabled = (stack, room) => room.available || stack;
     prix.engel.available = prix.engel.rooms.reduce(flatEnabled, false);
     prix.romains.available = prix.romains.rooms.reduce(flatEnabled, false);
@@ -382,7 +374,6 @@
 <body>
   <h1 class="fr">💰 Prix des chambres pour l'appartement</h1>
   <h1 class="en">💰 Room prices for the flat</h1>
-
   <div class="mb-4">
     <label>
       <input onClick="javascript:fr();" type="radio" name="lang" checked />
@@ -395,18 +386,16 @@
       English
     </label>
   </div>
-
   <p class="fr">
     Voici la liste de tous les frais liés à l'appartement. <br /><i>Ces frais seront les mêmes pour n'importe quelle
-      location et son donc
-      important à prendre en compte dans votre budget.</i>
+      location et sont donc
+      importants à prendre en compte dans votre budget.</i>
   </p>
   <p class="en">
-    Here is a list of all the costs associated with the flat. <br /><i>These costs will be be the same for any rental
+    Here is a list of all the costs associated with the flat. <br /><i>These costs will be the same for any rental
       and are therefore
       important for your budget.</i>
   </p>
-
   <div class="container">
     <div class="row">
       <div class="col-4 col-md-6">
@@ -419,7 +408,6 @@
               <input onClick="javascript:engel();" type="radio" name="flat" checked />
               💎 Engelbreit
             </label>
-
             📍
             <a href="https://maps.app.goo.gl/wKcdcpWdNxobHVT1A" target="_blank">
               adresse</a>
@@ -441,7 +429,6 @@
               details ↗</a>
           </li>
         </ul>
-
         <h3 class="fr">🛏️ Chambre</h3>
         <h3 class="en">🛏️ Room</h3>
         <div class="mb-4">
@@ -455,10 +442,8 @@
       </div>
     </div>
   </div>
-
   <h3 class="fr">💰 Prix</h3>
   <h3 class="en">💰 Cost</h3>
-
   <div class="mb-4 room">
     <h6 class="fr roomFR"></h6>
     <h6 class="en roomEN"></h6>
@@ -530,24 +515,20 @@
       </li>
     </ul>
   </div>
-
   <div>
     👉
     <a target="_blank" href="https://davidbabel.github.io/locatif/etapes/">
       <span class="fr">Etapes pour la location</span><span class="en">Steps for renting</span> ↗</a>
   </div>
-
   <div id="admin-tables">
     <div id="price-table"></div>
     <div id="price-table-futureless" class="mt-5"></div>
   </div>
-
   <script type="text/javascript">
     function $(selector) {
       var result = Array.from(document.querySelectorAll(selector));
       return result.length === 1 ? result[0] : result;
     }
-
     var admin = false;
     var adminPricesHistory = false;
     document.addEventListener("keydown", (event) => {
@@ -564,11 +545,8 @@
         buildPriceTable(adminPricesHistory);
       }
     });
-
     function FRDate(chaineDate) {
       if (chaineDate.length === 7) {
-        // Permet d'écrire des dates au format "MM/YYYY"
-        // Exemple: 01/2024
         chaineDate = "01/" + chaineDate;
       }
       var [day, month, year] = chaineDate.split("/");
@@ -634,11 +612,9 @@
       currentFlat = "romains";
       loadRooms();
     }
-
     function loadRooms() {
       var html = "";
       var IDalreadySelected = -1;
-
       prix[currentFlat].rooms?.forEach(
         ({ available, labelFR, labelEN, size, price_history }, index) => {
           if (available && IDalreadySelected < 0) {
@@ -662,43 +638,35 @@
       if (IDalreadySelected === -1) {
         IDalreadySelected = 0;
       }
-
       $("#rooms").set(html);
       room(IDalreadySelected);
       setLangage();
     }
-
-    // Fonction pour construire le tableau principal (avec historique si showHistory = true)
     function buildPriceTable(showHistory = false) {
       const container = $("#price-table");
       if (!container) return;
-
       const table = document.createElement("table");
-      table.className =
-        "table table-striped table-bordered align-middle text-center";
+      table.className = "table table-striped table-bordered align-middle text-center";
       table.style.tableLayout = "fixed";
       table.style.width = "100%";
-
       table.innerHTML = `
-    <thead class="table-dark">
-      <tr>
-        <th style="width: 12.5%">Date MaJ</th>
-        <th style="width: 12.5%">Nom</th>
-        <th style="width: 12.5%">Loyer</th>
-        <th style="width: 12.5%">Charges</th>
-        <th style="width: 12.5%">Loyer CC</th>
-        <th style="width: 12.5%">Caution</th>
-        <th style="width: 12.5%">m²</th>
-        <th style="width: 12.5%">€/m²</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  `;
-
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 8%">Date MaJ</th>
+            <th style="width: 18%">Locataire</th>
+            <th style="width: 10%">Nom</th>
+            <th style="width: 10%">Loyer</th>
+            <th style="width: 10%">Charges</th>
+            <th style="width: 10%">Loyer CC</th>
+            <th style="width: 10%">Caution</th>
+            <th style="width: 10%">m²</th>
+            <th style="width: 10%">€/m²</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
       const tbody = table.querySelector("tbody");
       const residences = ["romains", "engel"];
-
-      // Identifier les doublons de loyer CC à partir des derniers prix (avec ou sans future)
       const loyerCCCount = {};
       residences.forEach((residenceKey) => {
         const residence = prix[residenceKey];
@@ -714,13 +682,10 @@
       const duplicatedLoyersCC = Object.keys(loyerCCCount)
         .filter((price) => loyerCCCount[price] > 1)
         .map(Number);
-
-      // Construction du tableau
       residences.forEach((residenceKey) => {
         const residence = prix[residenceKey];
         const charges = lastPrice(residence.charges);
         const caution = lastPrice(residence.caution);
-
         let totalLoyerCC = 0;
         residence.rooms.forEach((room) => {
           const latest = getLatestEntry(room.price_history);
@@ -728,127 +693,114 @@
             totalLoyerCC += latest.price + charges;
           }
         });
-
         const separatorRow = document.createElement("tr");
         separatorRow.className = "table-primary fw-bold";
         const separatorCell = document.createElement("td");
-        separatorCell.colSpan = 8;
+        separatorCell.colSpan = 9;
         separatorCell.classList.add("text-start");
         separatorCell.textContent = `${residenceKey.toUpperCase()} – Total : ${totalLoyerCC}€`;
         separatorRow.appendChild(separatorCell);
         tbody.appendChild(separatorRow);
-
         residence.rooms.forEach((room) => {
           const sortedHistory = [...room.price_history].sort(
             (a, b) => FRDate(b.date) - FRDate(a.date)
           );
           const latest = sortedHistory[0];
-
           let starredDate = null;
           for (const entry of sortedHistory) {
-            if (!entry.future) {
+            if (entry.nom) {
               starredDate = entry.date;
               break;
             }
           }
-
           if (!showHistory) {
-            const dateMaj = latest.date + (!latest.future ? "*" : "");
+            const star = (latest.nom ? `<span title="actuel"> (*)</span>` : "");
+            const dateMaj = latest.date + star;
             const loyer = latest.price;
             const loyerCC = loyer + charges;
             const isDuplicate = duplicatedLoyersCC.includes(loyerCC);
             const loyerClass = isDuplicate ? "text-danger fw-bold" : "";
             const euroPerM2 = Math.round(loyer / room.size);
-
             const tr = document.createElement("tr");
             tr.innerHTML = `
-          <td>${dateMaj}</td>
-          <td>${room.shortName}</td>
-          <td>${loyer}€</td>
-          <td>${charges}€</td>
-          <td class="${loyerClass}">${loyerCC}€</td>
-          <td>${caution}€</td>
-          <td>${room.size} m²</td>
-          <td>${euroPerM2}€/m²</td>
-        `;
+              <td class="text-start">${dateMaj}</td>
+              <td>${latest.nom ? latest.nom : "<i>futur</i>"}</td>
+              <td>${room.shortName}</td>
+              <td>${loyer}€</td>
+              <td>${charges}€</td>
+              <td class="${loyerClass}">${loyerCC}€</td>
+              <td>${caution}€</td>
+              <td>${room.size} m²</td>
+              <td>${euroPerM2}€/m²</td>
+            `;
             tbody.appendChild(tr);
           } else {
             sortedHistory.forEach((entry) => {
               const loyerCC = entry.price + charges;
               const isDuplicate = duplicatedLoyersCC.includes(loyerCC);
               const loyerClass = isDuplicate ? "text-danger fw-bold" : "";
-              const isStar = !entry.future && entry.date === starredDate;
-              const dateMaj = entry.date + (isStar ? "*" : "");
+              const isStar = entry.nom && entry.date === starredDate;
+              const dateMaj = entry.date + (isStar ? `<span title="actuel"> (*)</span>` : "");
               const euroPerM2 = Math.round(entry.price / room.size);
-
               const isLatest = entry === latest;
               const italicStart = isLatest ? "" : "<i>";
               const italicEnd = isLatest ? "" : "</i>";
-
               const tr = document.createElement("tr");
               tr.innerHTML = `
-            <td>${dateMaj}</td>
-            <td>${isLatest ? room.shortName : ""}</td>
-            <td>${italicStart}${entry.price}€${italicEnd}</td>
-            <td>${charges}€</td>
-            <td class="${loyerClass}">${italicStart}${loyerCC}€${italicEnd}</td>
-            <td>${caution}€</td>
-            <td>${isLatest ? `${room.size} m²` : ""}</td>
-            <td>${euroPerM2}€/m²</td>
-          `;
+                <td class="text-start">${dateMaj}</td>
+                <td>${entry.nom ? entry.nom : "<i>futur</i>"}</td>
+                <td>${isLatest ? room.shortName : ""}</td>
+                <td>${italicStart}${entry.price}€${italicEnd}</td>
+                <td>${charges}€</td>
+                <td class="${loyerClass}">${italicStart}${loyerCC}€${italicEnd}</td>
+                <td>${caution}€</td>
+                <td>${isLatest ? `${room.size} m²` : ""}</td>
+                <td>${euroPerM2}€/m²</td>
+              `;
               tbody.appendChild(tr);
             });
           }
         });
       });
-
       container.innerHTML = "";
       container.appendChild(table);
     }
-
-    // Deuxième tableau : sans historique, sans prix futurs, doublons basés sur loyer CC affiché uniquement
     function buildPriceTableWithoutFuture() {
       const container = $("#price-table-futureless");
       if (!container) return;
-
       const table = document.createElement("table");
-      table.className =
-        "table table-striped table-bordered align-middle text-center";
+      table.className = "table table-striped table-bordered align-middle text-center";
       table.style.tableLayout = "fixed";
       table.style.width = "100%";
-
       table.innerHTML = `
-    <thead class="table-dark">
-      <tr>
-        <th style="width: 12.5%">Prix actuels</th>
-        <th style="width: 12.5%">Nom</th>
-        <th style="width: 12.5%">Loyer</th>
-        <th style="width: 12.5%">Charges</th>
-        <th style="width: 12.5%">Loyer CC</th>
-        <th style="width: 12.5%">Caution</th>
-        <th style="width: 12.5%">m²</th>
-        <th style="width: 12.5%">€/m²</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  `;
-
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 8%">Prix actuels</th>
+            <th style="width: 18%">Locataire</th>
+            <th style="width: 10%">Nom</th>
+            <th style="width: 10%">Loyer</th>
+            <th style="width: 10%">Charges</th>
+            <th style="width: 10%">Loyer CC</th>
+            <th style="width: 10%">Caution</th>
+            <th style="width: 10%">m²</th>
+            <th style="width: 10%">€/m²</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
       const tbody = table.querySelector("tbody");
       const residences = ["romains", "engel"];
-
       const loyerCCCount = {};
       const validRooms = [];
-
       residences.forEach((residenceKey) => {
         const residence = prix[residenceKey];
         const charges = lastPrice(residence.charges);
         const caution = lastPrice(residence.caution);
-
         residence.rooms.forEach((room) => {
           const sorted = [...room.price_history].sort(
             (a, b) => FRDate(b.date) - FRDate(a.date)
           );
-          const lastNonFuture = sorted.find((entry) => !entry.future);
+          const lastNonFuture = sorted.find((entry) => entry.nom);
           if (lastNonFuture) {
             const loyerCC = lastNonFuture.price + charges;
             loyerCCCount[loyerCC] = (loyerCCCount[loyerCC] || 0) + 1;
@@ -856,60 +808,51 @@
           }
         });
       });
-
       const duplicatedLoyersCC = Object.keys(loyerCCCount)
         .filter((price) => loyerCCCount[price] > 1)
         .map(Number);
-
       residences.forEach((residenceKey) => {
         const residence = prix[residenceKey];
         const charges = lastPrice(residence.charges);
         const caution = lastPrice(residence.caution);
-
         let totalLoyerCC = 0;
         const rooms = validRooms.filter((r) =>
           prix[residenceKey].rooms.includes(r.room)
         );
-
         rooms.forEach(({ lastNonFuture }) => {
           totalLoyerCC += lastNonFuture.price + charges;
         });
-
         const separatorRow = document.createElement("tr");
         separatorRow.className = "table-primary fw-bold";
         const separatorCell = document.createElement("td");
-        separatorCell.colSpan = 8;
+        separatorCell.colSpan = 9;
         separatorCell.classList.add("text-start");
         separatorCell.textContent = `${residenceKey.toUpperCase()} – Total : ${totalLoyerCC}€`;
         separatorRow.appendChild(separatorCell);
         tbody.appendChild(separatorRow);
-
         rooms.forEach(({ room, lastNonFuture, charges, caution }) => {
           const loyerCC = lastNonFuture.price + charges;
           const isDuplicate = duplicatedLoyersCC.includes(loyerCC);
           const loyerClass = isDuplicate ? "text-danger fw-bold" : "";
           const euroPerM2 = Math.round(lastNonFuture.price / room.size);
-
           const tr = document.createElement("tr");
           tr.innerHTML = `
-        <td>${lastNonFuture.date}</td>
-        <td>${room.shortName}</td>
-        <td>${lastNonFuture.price}€</td>
-        <td>${charges}€</td>
-        <td class="${loyerClass}">${loyerCC}€</td>
-        <td>${caution}€</td>
-        <td>${room.size} m²</td>
-        <td>${euroPerM2}€/m²</td>
-      `;
+            <td class="text-start">${lastNonFuture.date}</td>
+            <td>${lastNonFuture.nom || ""}</td>
+            <td>${room.shortName}</td>
+            <td>${lastNonFuture.price}€</td>
+            <td>${charges}€</td>
+            <td class="${loyerClass}">${loyerCC}€</td>
+            <td>${caution}€</td>
+            <td>${room.size} m²</td>
+            <td>${euroPerM2}€/m²</td>
+          `;
           tbody.appendChild(tr);
         });
       });
-
       container.innerHTML = "";
       container.appendChild(table);
     }
-
-    // Helpers
     function getLatestEntry(prices) {
       let latest = null;
       let latestDate = "01/01/1970";
@@ -921,18 +864,15 @@
       });
       return latest;
     }
-
     var lastRoomIndex = -1;
     function room(index = lastRoomIndex) {
       lastRoomIndex = index;
       var flat = prix[currentFlat];
       var { caution, charges } = flat;
       var { labelFR, labelEN, size, price_history, img } = flat.rooms[index];
-
       var hasAPL = $("#apl-checkbox").checked;
       var totalPrice =
         lastPrice(price_history) + lastPrice(charges) - (hasAPL ? 100 : 0);
-
       $(".roomFR").set(labelFR);
       $(".roomEN").set(labelEN);
       $(".loyer").setE(price_history);
@@ -940,10 +880,8 @@
       $(".charges").setE(charges);
       $(".caution").setE(caution);
       $(".total").set(totalPrice + " €");
-
       $("#room-image").src = img || "";
     }
-
     $(".insurance").set("≈ " + prix.insurance + " €");
     $("#engel-available-icon").set(prix.engel.available ? "✅" : "❌");
     $("#romains-available-icon").set(prix.romains.available ? "✅" : "❌");
