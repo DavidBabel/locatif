@@ -636,6 +636,7 @@
     var currentFlat = "engel";
     var urlParams = new URLSearchParams(window.location.search);
     var flat = urlParams.get("flat");
+    var chambre = urlParams.get("chambre");
     if (flat) {
       currentFlat = flat;
       $(`#${currentFlat}-available input`).click();
@@ -643,12 +644,26 @@
       currentFlat = "romains";
       $("#romains-available input").click();
     }
+    function updateURL() {
+      const url = new URL(window.location.href);
+      url.searchParams.set("flat", currentFlat);
+      if (lastRoomIndex !== -1) {
+        url.searchParams.set("chambre", lastRoomIndex);
+      } else {
+        url.searchParams.delete("chambre");
+      }
+      window.history.pushState({}, "", url);
+    }
     function engel() {
       currentFlat = "engel";
+      chambre = null;
+      updateURL();
       loadRooms();
     }
     function romains() {
       currentFlat = "romains";
+      chambre = null;
+      updateURL();
       loadRooms();
     }
     function getAvailableLabel(available) {
@@ -662,14 +677,14 @@
     }
     function loadRooms() {
       var html = "";
-      var IDalreadySelected = -1;
+      var firstAvailableIndex = -1;
       prix[currentFlat].rooms?.forEach(
         ({ available, labelFR, labelEN, size, price_history }, index) => {
           const { icon, label } = getAvailableLabel(available);
-          if (available && IDalreadySelected < 0) {
-            IDalreadySelected = index;
+          if (available && firstAvailableIndex < 0) {
+            firstAvailableIndex = index;
           }
-          var checked = IDalreadySelected == index ? "checked" : "";
+          var checked = (chambre == index || (firstAvailableIndex == index && !chambre)) ? "checked" : "";
           var disabled = admin || available ? "" : 'disabled="disabled"';
           var extraClass = admin || available ? "" : "disabled";
           html += `
@@ -683,11 +698,11 @@
           `;
         }
       );
-      if (IDalreadySelected === -1) {
-        IDalreadySelected = 0;
+      if (firstAvailableIndex === -1) {
+        firstAvailableIndex = 0;
       }
       $("#rooms").set(html);
-      room(IDalreadySelected);
+      room(firstAvailableIndex);
       setLangage();
     }
     function buildPriceTable(showHistory = false) {
@@ -916,6 +931,7 @@
     var lastRoomIndex = -1;
     function room(index = lastRoomIndex) {
       lastRoomIndex = index;
+      updateURL();
       var flat = prix[currentFlat];
       var { caution, charges } = flat;
       var { available, labelFR, labelEN, size, price_history, img } = flat.rooms[index];
