@@ -5,16 +5,16 @@
   <script>
     var available = {
       romains: {
-        celier: true,
-        cuisine: true,
+        celier: "2 août",
+        cuisine: "8 août",
         grandeD: false,
-        grandeG: true,
-        balcon: true,
+        grandeG: "9 août",
+        balcon: "31 août",
       },
       engel: {
         salon: false,
         sud: false,
-        nord: true,
+        nord: "8 août",
         ouest: false,
       },
     };
@@ -55,7 +55,6 @@
                 price: 355,
               },
               {
-                // nom: "futur",
                 date: "08/2025",
                 price: 375,
               },
@@ -80,7 +79,6 @@
                 price: 362,
               },
               {
-                // nom: "futur",
                 date: "08/2025",
                 price: 376,
               },
@@ -105,7 +103,6 @@
                 price: 370,
               },
               {
-                // nom: "futur",
                 date: "08/2025",
                 price: 385,
               },
@@ -130,7 +127,6 @@
                 price: 376,
               },
               {
-                // nom: "futur",
                 date: "08/2025",
                 price: 384,
               },
@@ -155,7 +151,6 @@
                 price: 378,
               },
               {
-                // nom: "futur",
                 date: "08/2025",
                 price: 390,
               },
@@ -201,7 +196,6 @@
                 price: 410,
               },
               {
-                // nom: "futur",
                 date: "08/2025",
                 price: 414,
               },
@@ -235,7 +229,6 @@
                 price: 410,
               },
               {
-                // nom: "futur",
                 date: "08/2025",
                 price: 420,
               },
@@ -259,7 +252,6 @@
                 price: 426,
               },
               {
-                // nom: "futur",
                 date: "08/2025",
                 price: 445,
               },
@@ -659,27 +651,36 @@
       currentFlat = "romains";
       loadRooms();
     }
+    function getAvailableLabel(available) {
+      if (available === "disponible") {
+        return { icon: "✅", label: "" };
+      } else if (available === false) {
+        return { icon: "❌", label: "" };
+      } else {
+        return { icon: "✅", label: ` - dispo le ${available}` };
+      }
+    }
     function loadRooms() {
       var html = "";
       var IDalreadySelected = -1;
       prix[currentFlat].rooms?.forEach(
         ({ available, labelFR, labelEN, size, price_history }, index) => {
+          const { icon, label } = getAvailableLabel(available);
           if (available && IDalreadySelected < 0) {
             IDalreadySelected = index;
           }
           var checked = IDalreadySelected == index ? "checked" : "";
-          var availableIcon = available ? "✅" : "❌";
-          var disabled = admin || available ? "" : `disabled="disabled"`;
+          var disabled = admin || available ? "" : 'disabled="disabled"';
           var extraClass = admin || available ? "" : "disabled";
           html += `
-              <li>
-                <label>
-                  ${availableIcon}&nbsp;
-                  <input onClick="javascript:room(${index});" type="radio" name="room" ${checked} ${disabled}/>
-                  <font class="fr ${extraClass}">${labelFR}</font> <font class="en">${labelEN}</font> - ${size}m²
-                </label>
-              </li>
-              `;
+            <li>
+              <label>
+                ${icon}&nbsp;
+                <input onClick="javascript:room(${index});" type="radio" name="room" ${checked} ${disabled}/>
+                <font class="fr ${extraClass}">${labelFR}${label}</font> <font class="en">${labelEN}${label}</font> - ${size}m²
+              </label>
+            </li>
+          `;
         }
       );
       if (IDalreadySelected === -1) {
@@ -761,7 +762,7 @@
             }
           }
           if (!showHistory) {
-            const star = (latest.nom ? `<span title="actuel"> (*)</span>` : "");
+            const star = latest.nom ? '<span title="actuel"> (*)</span>' : "";
             const dateMaj = latest.date + star;
             const loyer = latest.price;
             const loyerCC = loyer + charges;
@@ -787,7 +788,7 @@
               const isDuplicate = duplicatedLoyersCC.includes(loyerCC);
               const loyerClass = isDuplicate ? "text-danger fw-bold" : "";
               const isStar = entry.nom && entry.date === starredDate;
-              const dateMaj = entry.date + (isStar ? `<span title="actuel"> (*)</span>` : "");
+              const dateMaj = entry.date + (isStar ? '<span title="actuel"> (*)</span>' : "");
               const euroPerM2 = Math.round(entry.price / room.size);
               const isLatest = entry === latest;
               const italicStart = isLatest ? "" : "<i>";
@@ -883,6 +884,7 @@
           const loyerClass = isDuplicate ? "text-danger fw-bold" : "";
           const euroPerM2 = Math.round(lastNonFuture.price / room.size);
           const tr = document.createElement("tr");
+          const { label } = getAvailableLabel(room.available);
           tr.innerHTML = `
             <td class="text-start">${lastNonFuture.date}</td>
             <td>${lastNonFuture.nom || ""}</td>
@@ -916,12 +918,13 @@
       lastRoomIndex = index;
       var flat = prix[currentFlat];
       var { caution, charges } = flat;
-      var { labelFR, labelEN, size, price_history, img } = flat.rooms[index];
+      var { available, labelFR, labelEN, size, price_history, img } = flat.rooms[index];
+      const { label } = getAvailableLabel(available);
       var hasAPL = $("#apl-checkbox").checked;
       var totalPrice =
         lastPrice(price_history) + lastPrice(charges) - (hasAPL ? 100 : 0);
-      $(".roomFR").set(labelFR);
-      $(".roomEN").set(labelEN);
+      $(".roomFR").set(`${labelFR}${label}`);
+      $(".roomEN").set(`${labelEN}${label}`);
       $(".loyer").setE(price_history);
       $(".apl").set(hasAPL ? "-100 €" : "0 €");
       $(".charges").setE(charges);
