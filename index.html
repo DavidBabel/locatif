@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appartements</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 320px;
+      width: 100%;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .card-title {
+      padding: 1rem;
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    .card:hover .card-title {
+      color: #0077cc;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <a href="./romains" class="card">
+      <img src="romains/photos/salon-1.jpg" alt="Appartement Romains">
+      <div class="card-title">Appartement Romains</div>
+    </a>
+    <a href="./engelbreit" class="card">
+      <img src="engelbreit/photos/1.jpg" alt="Appartement Engelbreit">
+      <div class="card-title">Appartement Engelbreit</div>
+    </a>
+  </div>
+</body>
+
+</html>
