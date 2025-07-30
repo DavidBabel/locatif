@@ -19,6 +19,12 @@
 
     label {
       margin-right: 1rem;
+      cursor: pointer;
+    }
+
+    .disabled {
+      opacity: 0.5;
+      pointer-events: none;
     }
 
     img {
@@ -44,27 +50,28 @@
 <body>
 
   <h2>📍 Localisation Colocation Romains</h2>
-  <!-- adresse : https://maps.app.goo.gl/7aAse1czQfh6cf4j7 -->
 
   <div class="lieux">
-    <a href="https://maps.app.goo.gl/7aAse1czQfh6cf4j7" target="_blank"> 📌 Voir l'appartement sur 🗺️
-      Google Maps</a>
+    <a href="https://maps.app.goo.gl/7aAse1czQfh6cf4j7" target="_blank">📌 Voir l'appartement sur 🗺️ Google Maps</a>
+    <a href=".." target="_blank">🔙 Retour sur la page de l'appartement</a>
   </div>
 
   <div class="lieux">
     <strong>Choisir une destination :</strong><br>
+    <!-- <label><input type="radio" name="lieu" value="zones" checked> Zones de Strasbourg</label><br> -->
     <label><input type="radio" name="lieu" value="gare" checked> 🚉 Gare</label><br>
     <label><input type="radio" name="lieu" value="fac"> 🏫 Fac centrale Principale (Sciences, Droit, ...)</label><br>
     <label><input type="radio" name="lieu" value="medecine"> 🧪 Fac de médecine / Science Po</label><br>
     <label><input type="radio" name="lieu" value="centre"> 🛍️ Centre ville</label><br>
-    <label><input type="radio" name="lieu" value="supermarche"> 🛒 Supermarché</label>
+    <label><input type="radio" name="lieu" value="supermarche"> 🛒 Supermarché (Lidl)</label><br>
     <label><input type="radio" name="lieu" value="autoroute"> 🚗 Autoroute</label>
   </div>
 
   <div class="transport">
     <strong>Transport :</strong>
-    <label><input type="checkbox" id="velo" checked> 🚲 Vélo</label>
-    <label><input type="checkbox" id="tram"> 🚋 Tram + 🚶🏻 marche</label>
+    <label id="label-velo"><input type="checkbox" id="velo" checked> 🚲 Vélo</label>
+    <label id="label-tram"><input type="checkbox" id="tram"> 🚋 Tram + 🚶🏻 marche</label>
+    <label id="label-voiture"><input type="checkbox" id="voiture"> 🚗 Voiture</label>
   </div>
 
   <div id="image-container"></div>
@@ -72,22 +79,33 @@
 
   <script>
     const lieuRadios = document.querySelectorAll('input[name="lieu"]');
-    const veloCheckbox = document.getElementById('velo');
-    const tramCheckbox = document.getElementById('tram');
+    const velo = document.getElementById('velo');
+    const tram = document.getElementById('tram');
+    const voiture = document.getElementById('voiture');
+
+    const labelVelo = document.getElementById('label-velo');
+    const labelTram = document.getElementById('label-tram');
+    const labelVoiture = document.getElementById('label-voiture');
+
     const imageContainer = document.getElementById('image-container');
     const mapLink = document.getElementById('map-link');
 
     const mapLinks = {
       'gare-velo': 'https://maps.app.goo.gl/i2PZm6e3D9C4yFiWA',
       'gare-tram': 'https://maps.app.goo.gl/a3VXJzZESnuAc2P37',
+      'gare-car': 'https://maps.app.goo.gl/6n7q9Zi29zbQRdkY9',
       'fac-velo': 'https://maps.app.goo.gl/98yzPpPyQaJb9D7b7',
       'fac-tram': 'https://maps.app.goo.gl/TvPbdzVj6CLx2WeB9',
+      'fac-car': 'https://maps.app.goo.gl/k6wcj9vh9gtBihHw9',
       'medecine-velo': 'https://maps.app.goo.gl/kNQ8EeujbqzZ11ob9',
       'medecine-tram': 'https://maps.app.goo.gl/yHh7fSGDFC6oCNe28',
+      'medecine-car': 'https://maps.app.goo.gl/Sqib8yHpDci7decw7',
       'centre-velo': 'https://maps.app.goo.gl/5LGuKUg58R3FL8N26',
       'centre-tram': 'https://maps.app.goo.gl/HxYccrP67SLArWpLA',
+      'centre-car': 'https://maps.app.goo.gl/z72ZMm5MLTzm9Bsq7',
       'supermarche-velo': 'https://maps.app.goo.gl/6bRJXhx3rd42ipo88',
       'supermarche-tram': 'https://maps.app.goo.gl/kLqHSo6xCNZdTxwYA',
+      'supermarche-car': 'https://maps.app.goo.gl/bjoeWs8A4RPoHttC8',
       'autoroute-car': 'https://maps.app.goo.gl/GWTNf2HbxyxfZwpG7',
     };
 
@@ -98,44 +116,78 @@
       return null;
     }
 
+    function getTransportsDisponibles(lieu) {
+      const transports = new Set();
+      for (const key of Object.keys(mapLinks)) {
+        const [lieuKey, transportKey] = key.split('-');
+        if (lieuKey === lieu) {
+          transports.add(transportKey);
+        }
+      }
+      return transports;
+    }
+
+    function updateTransports(lieu) {
+      const transports = getTransportsDisponibles(lieu);
+
+      const updateCheckbox = (input, label, code) => {
+        const enabled = transports.has(code);
+        input.disabled = !enabled;
+        label.classList.toggle('disabled', !enabled);
+        if (!enabled) input.checked = false;
+      };
+
+      updateCheckbox(velo, labelVelo, 'velo');
+      updateCheckbox(tram, labelTram, 'tram');
+      updateCheckbox(voiture, labelVoiture, 'car');
+
+      // Si aucun transport n’est sélectionné, on coche le 1er dispo
+      if (!velo.checked && !tram.checked && !voiture.checked) {
+        if (velo.disabled === false) velo.checked = true;
+        else if (tram.disabled === false) tram.checked = true;
+        else if (voiture.disabled === false) voiture.checked = true;
+      }
+    }
+
+    function getTransportSelection() {
+      if (velo.checked) return 'velo';
+      if (tram.checked) return 'tram';
+      if (voiture.checked) return 'car';
+      return null;
+    }
+
     function update() {
       const lieu = getSelectedLieu();
-      const transport = [];
+      if (!lieu) return;
 
-      if (veloCheckbox.checked) transport.push('velo');
-      if (tramCheckbox.checked) transport.push('tram');
+      updateTransports(lieu);
 
-      if (!lieu || transport.length !== 1) {
-        imageContainer.innerHTML = '';
-        mapLink.textContent = '';
-        mapLink.href = '#';
-        return;
-      }
-
-      const transportValue = transport[0];
-      const key = `${lieu}-${transportValue}`;
+      const transport = getTransportSelection();
+      const key = `${lieu}-${transport}`;
       const imagePath = `./img/${key}.jpg`;
 
-      imageContainer.innerHTML = `<img src="${imagePath}" alt="${key}">`;
-
       if (mapLinks[key]) {
+        imageContainer.innerHTML = `<img src="${imagePath}" alt="${key}">`;
         mapLink.href = mapLinks[key];
         mapLink.textContent = '📌 Voir ce trajet sur 🗺️ Google Maps';
       } else {
+        imageContainer.innerHTML = '';
         mapLink.href = '#';
         mapLink.textContent = '';
       }
     }
 
+    // Événements
     lieuRadios.forEach(radio => radio.addEventListener('change', update));
-    veloCheckbox.addEventListener('change', () => {
-      if (veloCheckbox.checked) tramCheckbox.checked = false;
+    [velo, tram, voiture].forEach(input => input.addEventListener('change', () => {
+      // Un seul transport sélectionné à la fois
+      if (input.checked) {
+        [velo, tram, voiture].forEach(other => {
+          if (other !== input) other.checked = false;
+        });
+      }
       update();
-    });
-    tramCheckbox.addEventListener('change', () => {
-      if (tramCheckbox.checked) veloCheckbox.checked = false;
-      update();
-    });
+    }));
 
     window.addEventListener('DOMContentLoaded', update);
   </script>
