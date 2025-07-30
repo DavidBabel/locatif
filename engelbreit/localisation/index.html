@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Localisation 🚏 Colocation</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1rem;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    label {
+      margin-right: 1rem;
+    }
+
+    img {
+      max-width: 100%;
+      margin-top: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+
+    a {
+      display: block;
+      margin-top: 0.5rem;
+      word-break: break-word;
+    }
+
+    .transport,
+    .lieux {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>📍 Localisation Colocation</h1>
+  <!-- adresse : https://maps.app.goo.gl/7aAse1czQfh6cf4j7 -->
+
+  <div class="lieux">
+    <strong>🏙️ Choisir un lieu :</strong><br>
+    <label><input type="radio" name="lieu" value="gare" checked> 🚉 Gare</label><br>
+    <label><input type="radio" name="lieu" value="fac"> 🏫 Fac centrale</label><br>
+    <label><input type="radio" name="lieu" value="medecine"> 🧪 Fac de médecine</label><br>
+    <label><input type="radio" name="lieu" value="centre"> 🛍️ Centre ville</label><br>
+    <label><input type="radio" name="lieu" value="supermarche"> 🛒 Supermarché</label>
+  </div>
+
+  <div class="transport">
+    <strong>🚲/🚋 Transport :</strong><br>
+    <label><input type="checkbox" id="velo" checked> 🚲 Vélo</label>
+    <label><input type="checkbox" id="tram"> 🚋 Tram</label>
+  </div>
+
+  <div id="image-container"></div>
+  <a id="map-link" href="#" target="_blank"></a>
+
+  <script>
+    const lieuRadios = document.querySelectorAll('input[name="lieu"]');
+    const veloCheckbox = document.getElementById('velo');
+    const tramCheckbox = document.getElementById('tram');
+    const imageContainer = document.getElementById('image-container');
+    const mapLink = document.getElementById('map-link');
+
+    const mapLinks = {
+      'gare-velo': 'https://maps.google.com/?q=gare+velo',
+      'gare-tram': 'https://maps.google.com/?q=gare+tram',
+      'fac-velo': 'https://maps.google.com/?q=fac+centrale+velo',
+      'fac-tram': 'https://maps.google.com/?q=fac+centrale+tram',
+      'medecine-velo': 'https://maps.google.com/?q=fac+de+médecine+velo',
+      'medecine-tram': 'https://maps.google.com/?q=fac+de+médecine+tram',
+      'centre-velo': 'https://maps.google.com/?q=centre+ville+velo',
+      'centre-tram': 'https://maps.google.com/?q=centre+ville+tram',
+      'supermarche-velo': 'https://maps.app.goo.gl/6bRJXhx3rd42ipo88',
+      'supermarche-tram': 'https://maps.google.com/?q=supermarché+tram',
+    };
+
+    function getSelectedLieu() {
+      for (const radio of lieuRadios) {
+        if (radio.checked) return radio.value;
+      }
+      return null;
+    }
+
+    function update() {
+      const lieu = getSelectedLieu();
+      const transport = [];
+
+      if (veloCheckbox.checked) transport.push('velo');
+      if (tramCheckbox.checked) transport.push('tram');
+
+      if (!lieu || transport.length !== 1) {
+        imageContainer.innerHTML = '';
+        mapLink.textContent = '';
+        mapLink.href = '#';
+        return;
+      }
+
+      const transportValue = transport[0];
+      const key = `${lieu}-${transportValue}`;
+      const imagePath = `./img/${key}.jpg`;
+
+      imageContainer.innerHTML = `<img src="${imagePath}" alt="${key}">`;
+
+      if (mapLinks[key]) {
+        mapLink.href = mapLinks[key];
+        mapLink.textContent = '📌 Voir sur Google Maps';
+      } else {
+        mapLink.href = '#';
+        mapLink.textContent = '';
+      }
+    }
+
+    lieuRadios.forEach(radio => radio.addEventListener('change', update));
+    veloCheckbox.addEventListener('change', () => {
+      if (veloCheckbox.checked) tramCheckbox.checked = false;
+      update();
+    });
+    tramCheckbox.addEventListener('change', () => {
+      if (tramCheckbox.checked) veloCheckbox.checked = false;
+      update();
+    });
+
+    window.addEventListener('DOMContentLoaded', update);
+  </script>
+
+</body>
+
+</html>
